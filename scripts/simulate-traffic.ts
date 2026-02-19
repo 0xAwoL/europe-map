@@ -35,19 +35,6 @@ const CONNECTIONS: [string, string][] = [
     ["Budapest", "Warsaw"],
 ];
 
-const COLORS = [
-    "#10b981", // emerald
-    "#34d399", // emerald-light
-    "#6ee7b7", // emerald-lighter
-    "#059669", // emerald-dark
-    "#14b8a6", // teal
-    "#22d3ee", // cyan
-    "#38bdf8", // sky
-    "#a78bfa", // violet
-    "#f472b6", // pink
-    "#fb923c", // orange
-];
-
 let counter = 0;
 
 function pick<T>(arr: T[]): T {
@@ -64,7 +51,7 @@ function makePacketEvent() {
         city: from,
         target: to,
         type: "packet" as const,
-        color: pick(COLORS),
+        color: "#10b981", // emerald-500
         duration: 1 + Math.random() * 2, // 1–3s
     };
 }
