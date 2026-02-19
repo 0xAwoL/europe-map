@@ -5,12 +5,6 @@
 
 const API = "http://localhost:3000/api/events";
 
-const CITIES = [
-    "Warsaw", "Berlin", "Paris", "Madrid", "Rome", "Brussels",
-    "Amsterdam", "Vienna", "Prague", "Stockholm", "Helsinki",
-    "Lisbon", "Dublin", "Athens", "Budapest", "Bucharest",
-    "Copenhagen", "Zagreb", "Ljubljana", "Bratislava",
-];
 
 const CONNECTIONS: [string, string][] = [
     ["Warsaw", "Berlin"],
@@ -56,25 +50,7 @@ function makePacketEvent() {
     };
 }
 
-function makePulseEvent() {
-    return {
-        id: `sim-pls-${counter++}`,
-        city: pick(CITIES),
-        type: "pulse" as const,
-        color: pick(COLORS),
-        duration: 1 + Math.random() * 1.5,
-    };
-}
 
-function makeRippleEvent() {
-    return {
-        id: `sim-rpl-${counter++}`,
-        city: pick(CITIES),
-        type: "ripple" as const,
-        color: pick(COLORS),
-        duration: 1.5 + Math.random() * 1,
-    };
-}
 
 function makeBatch(size: number) {
     const events = [];
