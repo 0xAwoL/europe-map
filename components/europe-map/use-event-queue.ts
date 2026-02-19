@@ -44,16 +44,22 @@ export function useEventQueue(opts: EventQueueOptions = {}) {
         const timer = setInterval(() => {
             if (queueRef.current.length === 0) return;
 
-            const next = queueRef.current.shift()!;
+            // Take a batch of events (up to 20) instead of just 1
+            // capable of draining a large backlog quickly
+            const BATCH_SIZE = 20;
+            const batch = queueRef.current.splice(0, BATCH_SIZE);
             setQueueSize(queueRef.current.length);
-            setActiveEvents((prev) => [...prev, next]);
 
-            // Auto-prune this event after its animation finishes (duration + buffer)
-            const lifetimeMs = ((next.duration ?? 1.5) + 1) * 1000;
-            setTimeout(() => {
-                setActiveEvents((prev) => prev.filter((e) => e.id !== next.id));
-            }, lifetimeMs);
-        }, interval);
+            setActiveEvents((prev) => [...prev, ...batch]);
+
+            // Auto-prune these events after animation
+            batch.forEach(next => {
+                const lifetimeMs = ((next.duration ?? 1.5) + 1) * 1000;
+                setTimeout(() => {
+                    setActiveEvents((prev) => prev.filter((e) => e.id !== next.id));
+                }, lifetimeMs);
+            });
+        }, Math.max(50, interval)); // Force faster interval for high traffic if default is slow
 
         return () => clearInterval(timer);
     }, [interval]);
